@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
     @Inject
@@ -24,10 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        App.getApp().getAppComponent().inject(this);
+
         sharedPrefModel.putData("test", 123);
         tvAppName.setText(context.getString(R.string.app_name)+" "+sharedPrefModel.getData("test"));
     }
