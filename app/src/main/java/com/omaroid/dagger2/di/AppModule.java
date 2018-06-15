@@ -3,24 +3,23 @@ package com.omaroid.dagger2.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import javax.inject.Inject;
+import com.omaroid.dagger2.App;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class AppModule {
-private Context context;
-    public AppModule(Context context) {
-        this.context = context;
-    }
     @Provides
-    @AppScope
-    Context provideContext(){
-        return context;
+    Context provideContext(App application) {
+        return application.getApplicationContext();
     }
+    @Singleton
     @Provides
-    @AppScope
     @Inject
     SharedPreferences provideSharedPref(Context context){
         return context.getSharedPreferences("",Context.MODE_PRIVATE);

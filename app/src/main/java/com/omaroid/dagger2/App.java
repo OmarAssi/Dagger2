@@ -1,30 +1,30 @@
 package com.omaroid.dagger2;
 
+import android.app.Activity;
 import android.app.Application;
 
-import com.omaroid.dagger2.di.AppComponent;
-import com.omaroid.dagger2.di.AppModule;
 import com.omaroid.dagger2.di.DaggerAppComponent;
 
-public class App extends Application {
+import javax.inject.Inject;
 
-    private static App app;
-    private AppComponent appComponent;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+
+public class App extends Application implements HasActivityInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
+      DaggerAppComponent.builder().application(this).build().inject(this);
         super.onCreate();
-        app = this;
-        appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplicationContext()))
-                .build();
     }
 
-    public static App getApp() {
-        return app;
-    }
 
-    public AppComponent getAppComponent() {
-        return appComponent;
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return dispatchingAndroidInjector;
     }
 }
